@@ -6,11 +6,23 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(BUILD_SHARED_LIBS ON)
 
 # --- Houdini SDK paths ---
+# Try environment variable first, then auto-detect on Windows.
 set(HFS $ENV{HFS} CACHE PATH "Houdini install directory")
+if(NOT HFS OR NOT EXISTS "${HFS}")
+    if(WIN32)
+        file(GLOB _hfs_candidates "C:/Program Files/Side Effects Software/Houdini 21.*")
+        list(SORT _hfs_candidates ORDER DESCENDING)
+        if(_hfs_candidates)
+            list(GET _hfs_candidates 0 HFS)
+            set(HFS "${HFS}" CACHE PATH "Houdini install directory" FORCE)
+            message(STATUS "Auto-detected HFS: ${HFS}")
+        endif()
+    endif()
+endif()
 if(NOT HFS OR NOT EXISTS "${HFS}")
     message(FATAL_ERROR
         "HFS is not set or does not exist. "
-        "Please set the HFS environment variable to your Houdini install path.")
+        "Please set the HFS environment variable or pass -DHFS=<path>.")
 endif()
 
 if(WIN32)
@@ -21,33 +33,31 @@ endif()
 set(AR_HOUDINI_INCLUDE_DIR "${HFS}/toolkit/include")
 
 # --- Python (needed for Boost.Python headers) ---
+# Specify version: cmake .. -DPYTHON_VERSION=3.11
+set(PYTHON_VERSION "3.11" CACHE STRING "Python version to use (e.g. 3.11, 3.10, 3.9)")
+string(REPLACE "." "" _pyver_nodot "${PYTHON_VERSION}")
 if(WIN32)
-    if(EXISTS "${HFS}/python311")
-        set(AR_PYTHON_LIB python311)
-        set(AR_PYTHON_INCLUDE_DIR "${HFS}/python311/include")
-        set(AR_PYTHON_LIB_DIR "${HFS}/python311/libs")
-    elseif(EXISTS "${HFS}/python310")
-        set(AR_PYTHON_LIB python310)
-        set(AR_PYTHON_INCLUDE_DIR "${HFS}/python310/include")
-        set(AR_PYTHON_LIB_DIR "${HFS}/python310/libs")
-    elseif(EXISTS "${HFS}/python39")
-        set(AR_PYTHON_LIB python39)
-        set(AR_PYTHON_INCLUDE_DIR "${HFS}/python39/include")
-        set(AR_PYTHON_LIB_DIR "${HFS}/python39/libs")
-    else()
-        message(FATAL_ERROR "Could not find Python in Houdini install.")
+    set(_pydir "${HFS}/python${_pyver_nodot}")
+    if(NOT EXISTS "${_pydir}")
+        message(FATAL_ERROR
+            "Python ${PYTHON_VERSION} not found at ${_pydir}. "
+            "Available versions: check ${HFS}/python* directories.")
     endif()
+    set(AR_PYTHON_LIB "python${_pyver_nodot}")
+    set(AR_PYTHON_INCLUDE_DIR "${_pydir}/include")
+    set(AR_PYTHON_LIB_DIR "${_pydir}/libs")
 else()
-    if(EXISTS "${HFS}/python/bin/python3.11")
-        set(AR_PYTHON_INCLUDE_DIR "${HFS}/python/include/python3.11")
-        set(AR_PYTHON_LIB_DIR "${HFS}/python/lib")
-    elseif(EXISTS "${HFS}/python/bin/python3.10")
-        set(AR_PYTHON_INCLUDE_DIR "${HFS}/python/include/python3.10")
-        set(AR_PYTHON_LIB_DIR "${HFS}/python/lib")
-    else()
-        message(FATAL_ERROR "Could not find Python in Houdini install.")
+    set(_pybin "${HFS}/python/bin/python${PYTHON_VERSION}")
+    if(NOT EXISTS "${_pybin}")
+        message(FATAL_ERROR
+            "Python ${PYTHON_VERSION} not found at ${_pybin}. "
+            "Available versions: check ${HFS}/python/bin/ directory.")
     endif()
+    set(AR_PYTHON_LIB "python${PYTHON_VERSION}")
+    set(AR_PYTHON_INCLUDE_DIR "${HFS}/python/include/python${PYTHON_VERSION}")
+    set(AR_PYTHON_LIB_DIR "${HFS}/python/lib")
 endif()
+message(STATUS "Using Python ${PYTHON_VERSION} (${AR_PYTHON_LIB})")
 
 # --- PXR library prefix ---
 if(WIN32)

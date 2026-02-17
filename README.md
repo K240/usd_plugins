@@ -21,16 +21,44 @@ OpenUSD の `asset:` URI スキームを処理する ArResolver プラグイン�
 
 ## ビルド
 
+`HFS` 環境変数が未設定の場合、Windows では `C:\Program Files\Side Effects Software\Houdini 21.*` を自動検出します。
+
+### cmd
+
 ```bat
-set HFS=C:\Program Files\Side Effects Software\Houdini 21.0.596
 mkdir build
 cd build
-cmake .. -G "Visual Studio 17 2022" -A x64 -DCMAKE_INSTALL_PREFIX=../dist
+cmake .. -G "Visual Studio 17 2022" -A x64
 cmake --build . --config Release
 cmake --install . --config Release
 ```
 
-ビルド成果物は `dist/` に出力されます:
+### PowerShell
+
+```powershell
+mkdir build
+cd build
+cmake .. -G "Visual Studio 17 2022" -A x64
+cmake --build . --config Release
+cmake --install . --config Release
+```
+
+### CMake オプション
+
+| オプション | デフォルト | 説明 |
+|-----------|-----------|------|
+| `HFS` | 自動検出 | Houdini インストールパス（環境変数または `-DHFS=<path>`） |
+| `PYTHON_VERSION` | `3.11` | 使用する Python バージョン（例: `3.11`, `3.10`, `3.9`） |
+| `CMAKE_INSTALL_PREFIX` | `dist/` | インストール先ディレクトリ |
+
+Python バージョンを変更する場合:
+
+```powershell
+cmake .. -G "Visual Studio 17 2022" -A x64 -D"PYTHON_VERSION=3.9"
+```
+
+### ビルド成果物
+
 - `dist/lib/assetPathResolver.dll` - プラグイン本体
 - `dist/resources/plugInfo.json` - プラグイン登録情報
 
