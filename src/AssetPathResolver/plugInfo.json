@@ -1,0 +1,18 @@
+{
+    "Plugins": [
+        {
+            "Info": {
+                "Types": {
+                "AssetPathResolver": {
+                    "bases": ["ArResolver"],
+                    "uriSchemes": ["asset"]
+                    }
+                }
+            },
+            "LibraryPath": "../lib/assetPathResolver.dll",
+            "Name": "AssetPathResolver",
+            "Root": ".",
+            "Type": "library"
+        }
+    ]
+}
