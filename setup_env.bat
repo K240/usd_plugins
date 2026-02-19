@@ -15,7 +15,7 @@ if not defined HFS (
 )
 
 REM --- Houdini USD plugins (required for file formats etc.) ---
-set "PXR_PLUGINPATH_NAME=%HFS%\bin\usd_plugins;%~dp0dist\resources;%PXR_PLUGINPATH_NAME%"
+set "PXR_PLUGINPATH_NAME=%HFS%\bin\usd_plugins;%~dp0dist\resources;%~dp0dist\assetInfoSchema\resources;%PXR_PLUGINPATH_NAME%"
 
 REM --- Plugin library path ---
 set "PATH=%~dp0dist\lib;%HFS%\bin;%PATH%"

@@ -56,7 +56,7 @@ if __name__ == "__main__":
         )
 
     # Create versions.json (latest -> v10)
-    create_versions_json(asset_dir, "chair_0", "v9")
+    create_versions_json(asset_dir, "chair_0", "v10")
 
     print("Done.")
 

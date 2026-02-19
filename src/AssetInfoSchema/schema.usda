@@ -1,0 +1,31 @@
+#usda 1.0
+(
+    """Source schema definition for AssetInfoAPI.
+    The generatedSchema.usda is the runtime version read by USD."""
+)
+
+class "AssetInfoAPI" (
+    inherits = [</APISchemaBase>]
+    customData = {
+        token apiSchemaType = "singleApplyAPI"
+    }
+    doc = """Single-apply API schema that annotates a prim with asset metadata
+    such as version, author, and publication status."""
+) {
+    string assetInfo:version = "" (
+        doc = """Version string of the asset (e.g. "v10")."""
+    )
+
+    string assetInfo:author = "" (
+        doc = """Author or owner of the asset."""
+    )
+
+    token assetInfo:status = "draft" (
+        allowedTokens = ["draft", "review", "published", "deprecated"]
+        doc = """Publication status of the asset."""
+    )
+
+    string assetInfo:description = "" (
+        doc = """Human-readable description of the asset."""
+    )
+}

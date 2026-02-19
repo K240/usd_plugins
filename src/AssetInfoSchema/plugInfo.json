@@ -1,0 +1,21 @@
+{
+    "Plugins": [
+        {
+            "Info": {
+                "Types": {
+                    "AssetInfoSchemaAssetInfoAPI": {
+                        "alias": {
+                            "UsdSchemaBase": "AssetInfoAPI"
+                        },
+                        "bases": ["UsdAPISchemaBase"],
+                        "schemaKind": "singleApplyAPI"
+                    }
+                }
+            },
+            "Name": "assetInfoSchema",
+            "ResourcePath": ".",
+            "Root": ".",
+            "Type": "resource"
+        }
+    ]
+}

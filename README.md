@@ -120,6 +120,40 @@ REM 3. テスト実行
 
 `asset:chair_0`（バージョン未指定）は `versions.json` の `"latest"` を参照し、該当バージョンのファイルに解決されます。
 
+## AssetInfoAPI（Codeless Schema）
+
+Prim にアセットメタデータを付与する Single-Apply API Schema です。C++ コード不要で、`generatedSchema.usda` と `plugInfo.json` のみで定義されています。
+
+### 属性
+
+| 属性 | 型 | デフォルト | 説明 |
+|------|------|-----------|------|
+| `assetInfo:version` | string | `""` | バージョン文字列（例: `"v10"`） |
+| `assetInfo:author` | string | `""` | 作者 |
+| `assetInfo:status` | token | `"draft"` | ステータス（`draft` / `review` / `published` / `deprecated`） |
+| `assetInfo:description` | string | `""` | 説明 |
+
+### 使用例
+
+```python
+from pxr import Usd
+
+stage = Usd.Stage.Open("asset:chair_0")
+prim = stage.GetPrimAtPath("/chair_0")
+
+prim.ApplyAPI("AssetInfoAPI")
+prim.GetAttribute("assetInfo:version").Set("v10")
+prim.GetAttribute("assetInfo:author").Set("hideki")
+prim.GetAttribute("assetInfo:status").Set("published")
+```
+
+### テスト
+
+```powershell
+. .\setup_env.ps1
+& "$env:HFS\bin\hython.exe" tests\test_schema.py
+```
+
 ## デバッグ
 
 ### cmd

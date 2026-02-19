@@ -16,7 +16,7 @@ if (-not $env:HFS) {
 }
 
 # --- Houdini USD plugins (required for file formats etc.) ---
-$env:PXR_PLUGINPATH_NAME = "$env:HFS\bin\usd_plugins;$ScriptDir\dist\resources;$env:PXR_PLUGINPATH_NAME"
+$env:PXR_PLUGINPATH_NAME = "$env:HFS\bin\usd_plugins;$ScriptDir\dist\resources;$ScriptDir\dist\assetInfoSchema\resources;$env:PXR_PLUGINPATH_NAME"
 
 # --- Plugin library path ---
 $env:PATH = "$ScriptDir\dist\lib;$env:HFS\bin;$env:PATH"

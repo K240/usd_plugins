@@ -93,3 +93,10 @@ set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/dist" CACHE PATH "Install director
 
 # --- Subdirectories ---
 add_subdirectory(src/AssetPathResolver)
+
+# --- Codeless schemas (resource-only, no compilation) ---
+install(FILES
+    src/AssetInfoSchema/plugInfo.json
+    src/AssetInfoSchema/generatedSchema.usda
+    DESTINATION assetInfoSchema/resources
+)
